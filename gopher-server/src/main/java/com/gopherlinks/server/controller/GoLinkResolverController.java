@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+/**
+ * GoLink Resolver API.
+ */
 @RestController
 public class GoLinkResolverController {
     private static final Logger LOG = LoggerFactory.getLogger(GoLinkResolverController.class);

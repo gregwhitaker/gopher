@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
+/**
+ * GoLink Management API.
+ */
 @RestController
 @RequestMapping(value = "/api/v1/golinks")
 public class GoLinkController {
@@ -30,10 +33,11 @@ public class GoLinkController {
     }
 
     /**
+     * Get a paginated list of all GoLinks.
      *
-     * @param offset
-     * @param limit
-     * @return
+     * @param offset pagination offset
+     * @param limit pagination limit
+     * @return a {@link ViewAllGoLinksResponse}
      */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<?>> getAllGoLinks(@RequestParam(value = "offset", required = false, defaultValue = "0") long offset,
@@ -44,10 +48,11 @@ public class GoLinkController {
     }
 
     /**
+     * Creates a GoLink.
      *
-     * @param goLink
-     * @param url
-     * @return
+     * @param goLink golink
+     * @param url redirect url
+     * @return an HTTP 200 if created successfully
      */
     @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
                  produces = MediaType.APPLICATION_JSON_VALUE)
@@ -57,47 +62,50 @@ public class GoLinkController {
     }
 
     /**
+     * Gets a GoLink.
      *
-     * @param goLinkId
-     * @return
+     * @param goLink golink
+     * @return an HTTP 200 if the golink exists; otherwise an HTTP 404
      */
     @GetMapping(value = "/{id}",
                 produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ResponseEntity<?>> getGoLink(@PathVariable("id") String goLinkId) {
-        return goLinkManagementService.getGoLink(goLinkId)
+    public Mono<ResponseEntity<?>> getGoLink(@PathVariable("id") String goLink) {
+        return goLinkManagementService.getGoLink(goLink)
                 .map(values -> ResponseEntity.ok(ViewGoLinkResponse.from(values)));
     }
 
     /**
-     *
-     * @param goLinkId
-     * @return
+     * Deletes a GoLink.
+     * @param goLink golink
+     * @return an HTTP 200 if the golink exists; otherwise an HTTP 404
      */
     @DeleteMapping(value = "/{id}")
-    public Mono<ResponseEntity<?>> deleteGoLink(@PathVariable("id") String goLinkId) {
-        return goLinkManagementService.deleteGoLink(goLinkId)
+    public Mono<ResponseEntity<?>> deleteGoLink(@PathVariable("id") String goLink) {
+        return goLinkManagementService.deleteGoLink(goLink)
                 .then(Mono.just(ResponseEntity.ok().build()));
     }
 
     /**
+     * Activates a GoLink.
      *
-     * @param goLinkId
-     * @return
+     * @param goLink golink
+     * @return an HTTP 200 if the golink exists; otherwise an HTTP 404
      */
     @PutMapping(value = "/{id}/active",
                 produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ResponseEntity<?>> activateGoLink(@PathVariable("id") String goLinkId) {
+    public Mono<ResponseEntity<?>> activateGoLink(@PathVariable("id") String goLink) {
         throw new RuntimeException("Not Implemented");
     }
 
     /**
+     * Deactivates a GoLink.
      *
-     * @param goLinkId
-     * @return
+     * @param goLink golink
+     * @return an HTTP 200 if the golink exists; otherwise an HTTP 404
      */
     @DeleteMapping(value = "/{id}/active",
                    produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ResponseEntity<?>> deactivateGoLink(@PathVariable("id") String goLinkId) {
+    public Mono<ResponseEntity<?>> deactivateGoLink(@PathVariable("id") String goLink) {
         throw new RuntimeException("Not Implemented");
     }
 }
