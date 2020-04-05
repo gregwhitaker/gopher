@@ -36,18 +36,20 @@ public class GoLinkCache {
     }
 
     /**
+     * Gets a GoLink from the cache.
      *
-     * @param goLink
-     * @return
+     * @param goLink golink to retrieve
+     * @return async url
      */
     public CompletableFuture<String> get(String goLink) {
         return resolverCache.get(goLink);
     }
 
     /**
+     * Removes a GoLink from the cache.
      *
-     * @param goLink
-     * @return
+     * @param goLink golink to remove
+     * @return async void
      */
     public CompletableFuture<Void> remove(String goLink) {
         return CompletableFuture.runAsync(() -> resolverCache.synchronous().invalidate(goLink));

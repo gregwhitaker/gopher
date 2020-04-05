@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+/**
+ * Service for resolving GoLinks.
+ */
 @Component
 public class GoLinkResolverService {
     private static final Logger LOG = LoggerFactory.getLogger(GoLinkResolverService.class);

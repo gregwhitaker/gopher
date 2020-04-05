@@ -13,6 +13,9 @@ import reactor.util.function.Tuples;
 
 import java.util.List;
 
+/**
+ * Service for managing configured GoLinks.
+ */
 @Component
 public class GoLinkManagementService {
     private static final Logger LOG = LoggerFactory.getLogger(GoLinkManagementService.class);
@@ -26,6 +29,13 @@ public class GoLinkManagementService {
         this.goLinkCache = goLinkCache;
     }
 
+    /**
+     * Gets a paginated list of all GoLinks.
+     *
+     * @param offset pagination offset
+     * @param limit pagination limit
+     * @return a list of GoLinks
+     */
     public Mono<List<Tuple2<String, String>>> getAllGoLinks(long offset, long limit) {
         return goLinkRepo.findAll()
                 .skip(offset)
@@ -33,16 +43,35 @@ public class GoLinkManagementService {
                 .collectList();
     }
 
+    /**
+     * Returns a single GoLink.
+     *
+     * @param goLink golink to return
+     * @return golink and url
+     */
     public Mono<Tuple2<String, String>> getGoLink(String goLink) {
         return goLinkRepo.findOne(goLink)
                 .switchIfEmpty(Mono.error(new GoLinkNotFoundException(goLink)))
                 .map(url -> Tuples.of(goLink, url));
     }
 
+    /**
+     * Creates a new GoLink.
+     *
+     * @param goLink golink
+     * @param url redirect url
+     * @return void
+     */
     public Mono<Void> createGoLink(String goLink, String url) {
         return goLinkRepo.put(goLink, url);
     }
 
+    /**
+     * Deletes an existing GoLink.
+     *
+     * @param goLink golink to delete
+     * @return void
+     */
     public Mono<Void> deleteGoLink(String goLink) {
         return goLinkRepo.findOne(goLink)
                 .switchIfEmpty(Mono.error(new GoLinkNotFoundException(goLink)))

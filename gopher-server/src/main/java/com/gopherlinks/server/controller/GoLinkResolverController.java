@@ -23,6 +23,12 @@ public class GoLinkResolverController {
         this.goLinkResolverService = goLinkResolverService;
     }
 
+    /**
+     * Resolves a GoLink to a URL redirect.
+     *
+     * @param goLink golink to resolve
+     * @return a url redirect if the golink exists; otherwise an HTTP 404 NOT FOUND response
+     */
     @GetMapping(value = "/{golink}")
     public Mono<ResponseEntity<Object>> resolveGoLink(@PathVariable("golink") String goLink) {
         return goLinkResolverService.resolveGoLink(goLink)

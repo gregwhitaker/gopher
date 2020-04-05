@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import reactor.core.publisher.Mono;
 
+/**
+ * Global error handler responsible for converting unhandled exceptions to API responses.
+ */
 @ControllerAdvice
 public class GlobalErrorHandler {
 
