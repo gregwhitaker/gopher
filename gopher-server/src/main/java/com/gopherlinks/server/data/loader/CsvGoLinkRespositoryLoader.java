@@ -31,13 +31,21 @@ public class CsvGoLinkRespositoryLoader implements GoLinkRepositoryLoader {
     public Mono<Void> load(GoLinkRepository goLinkRepository) {
         return Flux.create((Consumer<FluxSink<Tuple2<String, String>>>) fluxSink -> {
             try (BufferedReader reader = new BufferedReader(new FileReader(filePath.toFile()))) {
+                LOG.info("Loading GoLink repository from CSV file [file: '{}']", filePath);
+
                 String line;
                 int rowCount = 0;
                 while ((line = reader.readLine()) != null) {
                     // Skip the header row
                     if (rowCount > 0) {
-                        String[] parts = line.split(",");
-                        fluxSink.next(Tuples.of(parts[0], parts[1]));
+                        if (!line.isEmpty()) {
+                            String[] parts = line.split(",");
+
+                            if (parts.length == 2) {
+                                fluxSink.next(Tuples.of(parts[0], parts[1]));
+                                LOG.debug("Loading GoLink [golink: '{}', url: '{}'", parts[0], parts[1]);
+                            }
+                        }
                     }
 
                     rowCount++;
