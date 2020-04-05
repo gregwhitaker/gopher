@@ -14,4 +14,6 @@ public interface GoLinkRepository {
     CompletableFuture<String> findOne(String goLink, Executor executor);
 
     Flux<Tuple2<String, String>> findAll();
+
+    Mono<Void> put(String goLink, String url);
 }

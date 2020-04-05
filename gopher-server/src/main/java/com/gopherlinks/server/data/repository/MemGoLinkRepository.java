@@ -48,4 +48,12 @@ public class MemGoLinkRepository implements GoLinkRepository {
         return Flux.fromIterable(entries.entrySet())
                 .map(entry -> Tuples.of(entry.getKey(), entry.getValue()));
     }
+
+    @Override
+    public Mono<Void> put(String goLink, String url) {
+        return Mono.defer(() -> {
+            entries.put(goLink, url);
+            return Mono.empty();
+        });
+    }
 }
