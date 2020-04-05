@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
@@ -26,35 +27,67 @@ public class GoLinkController {
         this.goLinkManagementService = goLinkManagementService;
     }
 
+    /**
+     *
+     * @param offset
+     * @param limit
+     * @return
+     */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<?>> listGoLinks(@RequestParam(value = "offset", required = false, defaultValue = "0") long offset,
                                                @RequestParam(value = "limit", required = false, defaultValue = "25") long limit) {
         return null;
     }
 
+    /**
+     *
+     * @param goLink
+     * @param url
+     * @return
+     */
     @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
                  produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ResponseEntity<?>> createGoLink() {
+    public Mono<ResponseEntity<?>> createGoLink(@RequestPart("golink") String goLink, @RequestPart("url") String url) {
         return null;
     }
 
+    /**
+     *
+     * @param goLinkId
+     * @return
+     */
     @GetMapping(value = "/{id}",
                 produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<?>> viewGoLink(@PathVariable("id") String goLinkId) {
         return null;
     }
 
+    /**
+     *
+     * @param goLinkId
+     * @return
+     */
     @DeleteMapping(value = "/{id}")
     public Mono<ResponseEntity<?>> deleteGoLink(@PathVariable("id") String goLinkId) {
         return null;
     }
 
+    /**
+     *
+     * @param goLinkId
+     * @return
+     */
     @PutMapping(value = "/{id}/active",
                 produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<?>> activateGoLink(@PathVariable("id") String goLinkId) {
         return null;
     }
 
+    /**
+     *
+     * @param goLinkId
+     * @return
+     */
     @DeleteMapping(value = "/{id}/active",
                    produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<?>> deactivateGoLink(@PathVariable("id") String goLinkId) {

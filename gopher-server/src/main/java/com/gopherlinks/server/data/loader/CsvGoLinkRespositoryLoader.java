@@ -13,6 +13,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -20,6 +22,7 @@ import java.util.function.Consumer;
  */
 public class CsvGoLinkRespositoryLoader implements GoLinkRepositoryLoader {
     private static final Logger LOG = LoggerFactory.getLogger(CsvGoLinkRespositoryLoader.class);
+    private static final List<String> PROHIBITED_GOLINKS = Arrays.asList("api");
 
     private final Path filePath;
 
@@ -42,8 +45,12 @@ public class CsvGoLinkRespositoryLoader implements GoLinkRepositoryLoader {
                             String[] parts = line.split(",");
 
                             if (parts.length == 2) {
-                                fluxSink.next(Tuples.of(parts[0], parts[1]));
-                                LOG.debug("Loading GoLink [golink: '{}', url: '{}'", parts[0], parts[1]);
+                                if (!PROHIBITED_GOLINKS.contains(parts[0].toLowerCase())) {
+                                    fluxSink.next(Tuples.of(parts[0], parts[1]));
+                                    LOG.debug("Loading GoLink [golink: '{}', url: '{}']", parts[0], parts[1]);
+                                } else {
+                                    LOG.warn("Prohibited GoLink Found. Skipping [golink: '{}', url: '{}']", parts[0], parts[1]);
+                                }
                             }
                         }
                     }
