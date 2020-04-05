@@ -66,8 +66,8 @@ public class GoLinkResolverService {
      * Loads the cache with all GoLinks in the datastore.
      */
     private Mono<Void> loadAll() {
-        return Mono.defer(() -> {
-           return Mono.empty();
-        });
+        return goLinkRepo.findAll()
+                .doOnNext(vals -> resolverCache.put(vals.getT1(), CompletableFuture.completedFuture(vals.getT2())))
+                .then();
     }
 }
