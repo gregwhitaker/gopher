@@ -28,4 +28,16 @@ public class GlobalErrorHandler {
                    .body(response);
         });
     }
+
+    @ExceptionHandler(DuplicateGoLinkException.class)
+    public Mono<ResponseEntity<?>> handleDuplicateGoLinkException(DuplicateGoLinkException e) {
+        return Mono.fromSupplier(() -> {
+            ErrorResponse response = new ErrorResponse();
+            response.setStatus(HttpStatus.CONFLICT.value());
+            response.setMessage(e.getMessage());
+
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(response);
+        });
+    }
 }

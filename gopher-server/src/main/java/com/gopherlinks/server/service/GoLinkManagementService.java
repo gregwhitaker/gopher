@@ -2,6 +2,7 @@ package com.gopherlinks.server.service;
 
 import com.gopherlinks.server.core.resolver.GoLinkCache;
 import com.gopherlinks.server.data.repository.GoLinkRepository;
+import com.gopherlinks.server.error.DuplicateGoLinkException;
 import com.gopherlinks.server.error.GoLinkNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +64,10 @@ public class GoLinkManagementService {
      * @return void
      */
     public Mono<Void> createGoLink(String goLink, String url) {
-        return Mono.defer(() -> goLinkRepo.put(goLink, url));
+        return goLinkRepo.findOne(goLink)
+                .map(s -> true)
+                .switchIfEmpty(Mono.just(false))
+                .flatMap(exists -> exists ? Mono.error(new DuplicateGoLinkException(goLink)) : goLinkRepo.put(goLink, url));
     }
 
     /**
