@@ -23,3 +23,11 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
 }
+
+// Spring Boot
+task bootRunLocal {
+    bootRun.configure {
+        systemProperty 'spring.profiles.active', 'local'
+    }
+}
+bootRunLocal.finalizedBy bootRun
