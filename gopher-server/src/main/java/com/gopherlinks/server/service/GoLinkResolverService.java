@@ -53,13 +53,7 @@ public class GoLinkResolverService {
      * @return resolved GoLink value to cache
      */
     private CompletableFuture<String> loadKey(String key, Executor executor) {
-        return CompletableFuture.supplyAsync(() -> {
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Key not found in cache! Loading from datastore [key: '{}']", key);
-            }
-
-            return "http://www.google.com";
-        }, executor);
+        return goLinkRepo.findOne(key, executor);
     }
 
     /**
