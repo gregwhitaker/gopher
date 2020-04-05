@@ -1,5 +1,6 @@
 package com.gopherlinks.server.controller;
 
+import com.gopherlinks.server.controller.model.CreateGoLinkRequest;
 import com.gopherlinks.server.controller.model.ViewAllGoLinksResponse;
 import com.gopherlinks.server.controller.model.ViewGoLinkResponse;
 import com.gopherlinks.server.service.GoLinkManagementService;
@@ -7,16 +8,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuples;
 
 /**
  * GoLink Management API.
@@ -50,15 +55,28 @@ public class GoLinkController {
     /**
      * Creates a GoLink.
      *
-     * @param goLink golink
-     * @param url redirect url
+     * @param webExchange webflux webexchange
      * @return an HTTP 200 if created successfully
      */
     @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
                  produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ResponseEntity<?>> createGoLink(@RequestPart("golink") String goLink, @RequestPart("url") String url) {
-        return goLinkManagementService.createGoLink(goLink, url)
-                .then(Mono.just(ResponseEntity.ok().build()));
+    public Mono<ResponseEntity<?>> createGoLink(ServerWebExchange webExchange) {
+        return webExchange.getFormData().map(formData -> {
+            final String golink = formData.getFirst("golink");
+            final String url = formData.getFirst("url");
+
+            if (golink == null || golink.isEmpty()) {
+                throw new RuntimeException();
+            }
+
+            if (url == null || url.isEmpty()) {
+                throw new RuntimeException();
+            }
+
+            return Tuples.of(golink, url);
+        })
+        .flatMap(objects -> goLinkManagementService.createGoLink(objects.getT1(), objects.getT2()))
+        .then(Mono.just(ResponseEntity.ok().build()));
     }
 
     /**

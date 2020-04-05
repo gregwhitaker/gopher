@@ -63,7 +63,7 @@ public class GoLinkManagementService {
      * @return void
      */
     public Mono<Void> createGoLink(String goLink, String url) {
-        return goLinkRepo.put(goLink, url);
+        return Mono.defer(() -> goLinkRepo.put(goLink, url));
     }
 
     /**
