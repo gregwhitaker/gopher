@@ -1,5 +1,6 @@
 package com.gopherlinks.server.controller;
 
+import com.gopherlinks.server.service.GoLinkManagementService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -18,6 +19,12 @@ import reactor.core.publisher.Mono;
 @RequestMapping(value = "/api/v1/golinks")
 public class GoLinkController {
     private static final Logger LOG = LoggerFactory.getLogger(GoLinkController.class);
+
+    private final GoLinkManagementService goLinkManagementService;
+
+    public GoLinkController(GoLinkManagementService goLinkManagementService) {
+        this.goLinkManagementService = goLinkManagementService;
+    }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<?>> listGoLinks(@RequestParam(value = "offset", required = false, defaultValue = "0") long offset,
