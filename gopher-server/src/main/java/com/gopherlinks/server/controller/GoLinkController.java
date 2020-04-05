@@ -1,23 +1,20 @@
 package com.gopherlinks.server.controller;
 
-import com.gopherlinks.server.controller.model.CreateGoLinkRequest;
 import com.gopherlinks.server.controller.model.ViewAllGoLinksResponse;
 import com.gopherlinks.server.controller.model.ViewGoLinkResponse;
+import com.gopherlinks.server.error.MissingFormDataException;
 import com.gopherlinks.server.service.GoLinkManagementService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -66,11 +63,11 @@ public class GoLinkController {
             final String url = formData.getFirst("url");
 
             if (golink == null || golink.isEmpty()) {
-                throw new RuntimeException();
+                throw new MissingFormDataException("golink");
             }
 
             if (url == null || url.isEmpty()) {
-                throw new RuntimeException();
+                throw new MissingFormDataException("url");
             }
 
             return Tuples.of(golink, url);

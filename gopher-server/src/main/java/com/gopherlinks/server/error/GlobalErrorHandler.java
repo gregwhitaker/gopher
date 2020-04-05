@@ -1,5 +1,6 @@
 package com.gopherlinks.server.error;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,5 +15,17 @@ public class GlobalErrorHandler {
     @ExceptionHandler(GoLinkNotFoundException.class)
     public Mono<ResponseEntity<?>> handleGoLinkNotFoundException(GoLinkNotFoundException e) {
         return Mono.just(ResponseEntity.notFound().build());
+    }
+
+    @ExceptionHandler(MissingFormDataException.class)
+    public Mono<ResponseEntity<?>> handleMissingFormDataException(MissingFormDataException e) {
+        return Mono.fromSupplier(() -> {
+           ErrorResponse response = new ErrorResponse();
+           response.setStatus(HttpStatus.BAD_REQUEST.value());
+           response.setMessage(e.getMessage());
+
+           return ResponseEntity.badRequest()
+                   .body(response);
+        });
     }
 }
