@@ -41,6 +41,6 @@ public class GoLinkManagementService {
     public Mono<Void> deleteGoLink(String goLink) {
         return goLinkRepo.findOne(goLink)
                 .switchIfEmpty(Mono.error(new GoLinkNotFoundException(goLink)))
-                .flatMap(goLinkRepo::remove);
+                .flatMap(s -> goLinkRepo.remove(goLink));
     }
 }
