@@ -14,6 +14,9 @@ import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 
+/**
+ * Cache that holds the GoLinks for resolution.
+ */
 @Component
 public class GoLinkCache {
     private static final Logger LOG = LoggerFactory.getLogger(GoLinkCache.class);
