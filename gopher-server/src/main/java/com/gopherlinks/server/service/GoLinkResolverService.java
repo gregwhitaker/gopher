@@ -2,8 +2,10 @@ package com.gopherlinks.server.service;
 
 import com.github.benmanes.caffeine.cache.AsyncLoadingCache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.gopherlinks.server.data.repository.GoLinkRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -16,9 +18,12 @@ import java.util.concurrent.Executor;
 public class GoLinkResolverService {
     private static final Logger LOG = LoggerFactory.getLogger(GoLinkResolverService.class);
 
+    private final GoLinkRepository goLinkRepo;
     private final AsyncLoadingCache<String, String> resolverCache;
 
-    public GoLinkResolverService() {
+    @Autowired
+    public GoLinkResolverService(GoLinkRepository goLinkRepo) {
+        this.goLinkRepo = goLinkRepo;
         this.resolverCache = Caffeine.newBuilder()
                 .maximumSize(10_000)
                 .expireAfterAccess(Duration.ofHours(24))
