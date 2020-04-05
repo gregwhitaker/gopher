@@ -1,5 +1,7 @@
 package com.gopherlinks.server.controller;
 
+import com.gopherlinks.server.controller.model.ViewAllGoLinksResponse;
+import com.gopherlinks.server.controller.model.ViewGoLinkResponse;
 import com.gopherlinks.server.service.GoLinkManagementService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,9 +36,11 @@ public class GoLinkController {
      * @return
      */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ResponseEntity<?>> listGoLinks(@RequestParam(value = "offset", required = false, defaultValue = "0") long offset,
-                                               @RequestParam(value = "limit", required = false, defaultValue = "25") long limit) {
-        return null;
+    public Mono<ResponseEntity<?>> getAllGoLinks(@RequestParam(value = "offset", required = false, defaultValue = "0") long offset,
+                                                 @RequestParam(value = "limit", required = false, defaultValue = "25") long limit) {
+        return goLinkManagementService.getAllGoLinks(offset, limit)
+                .map(values -> ResponseEntity.ok(ViewAllGoLinksResponse.from(values)));
+
     }
 
     /**
@@ -48,7 +52,8 @@ public class GoLinkController {
     @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
                  produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<?>> createGoLink(@RequestPart("golink") String goLink, @RequestPart("url") String url) {
-        return null;
+        return goLinkManagementService.createGoLink(goLink, url)
+                .then(Mono.just(ResponseEntity.ok().build()));
     }
 
     /**
@@ -58,8 +63,9 @@ public class GoLinkController {
      */
     @GetMapping(value = "/{id}",
                 produces = MediaType.APPLICATION_JSON_VALUE)
-    public Mono<ResponseEntity<?>> viewGoLink(@PathVariable("id") String goLinkId) {
-        return null;
+    public Mono<ResponseEntity<?>> getGoLink(@PathVariable("id") String goLinkId) {
+        return goLinkManagementService.getGoLink(goLinkId)
+                .map(values -> ResponseEntity.ok(ViewGoLinkResponse.from(values)));
     }
 
     /**
@@ -69,7 +75,8 @@ public class GoLinkController {
      */
     @DeleteMapping(value = "/{id}")
     public Mono<ResponseEntity<?>> deleteGoLink(@PathVariable("id") String goLinkId) {
-        return null;
+        return goLinkManagementService.deleteGoLink(goLinkId)
+                .then(Mono.just(ResponseEntity.ok().build()));
     }
 
     /**
@@ -80,7 +87,7 @@ public class GoLinkController {
     @PutMapping(value = "/{id}/active",
                 produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<?>> activateGoLink(@PathVariable("id") String goLinkId) {
-        return null;
+        throw new RuntimeException("Not Implemented");
     }
 
     /**
@@ -91,6 +98,6 @@ public class GoLinkController {
     @DeleteMapping(value = "/{id}/active",
                    produces = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<?>> deactivateGoLink(@PathVariable("id") String goLinkId) {
-        return null;
+        throw new RuntimeException("Not Implemented");
     }
 }

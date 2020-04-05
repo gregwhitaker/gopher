@@ -56,4 +56,12 @@ public class MemGoLinkRepository implements GoLinkRepository {
             return Mono.empty();
         });
     }
+
+    @Override
+    public Mono<Void> remove(String goLink) {
+        return Mono.defer(() -> {
+            entries.remove(goLink);
+            return Mono.empty();
+        });
+    }
 }

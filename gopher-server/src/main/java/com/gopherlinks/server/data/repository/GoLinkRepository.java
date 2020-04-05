@@ -16,4 +16,6 @@ public interface GoLinkRepository {
     Flux<Tuple2<String, String>> findAll();
 
     Mono<Void> put(String goLink, String url);
+
+    Mono<Void> remove(String goLink);
 }
