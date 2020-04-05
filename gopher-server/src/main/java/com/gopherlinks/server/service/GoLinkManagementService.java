@@ -22,7 +22,10 @@ public class GoLinkManagementService {
     }
 
     public Mono<List<Tuple2<String, String>>> getAllGoLinks(long offset, long limit) {
-        return null;
+        return goLinkRepo.findAll()
+                .skip(offset)
+                .take(limit)
+                .collectList();
     }
 
     public Mono<Tuple2<String, String>> getGoLink(String goLink) {
