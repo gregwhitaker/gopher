@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.function.Consumer;
 
+/**
+ * Loads a {@link GoLinkRepository} with GoLink mappings from a CSV file.
+ */
 public class CsvGoLinkRespositoryLoader implements GoLinkRepositoryLoader {
     private static final Logger LOG = LoggerFactory.getLogger(CsvGoLinkRespositoryLoader.class);
 
