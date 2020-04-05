@@ -67,7 +67,7 @@ public class GoLinkResolverService {
      */
     private Mono<Void> loadAll() {
         return goLinkRepo.findAll()
-                .doOnNext(vals -> resolverCache.put(vals.getT1(), CompletableFuture.completedFuture(vals.getT2())))
+                .doOnNext(o -> resolverCache.put(o.getT1(), CompletableFuture.completedFuture(o.getT2())))
                 .then();
     }
 }
