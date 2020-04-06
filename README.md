@@ -8,6 +8,9 @@ important corporate information and systems called "go" links. For instance, if 
 HR system, you simply directed your browser at http://go/paystubs and you would be redirected to your paystub information
 in the internal HR system.
 
+## Bugs and Feedback
+For bugs, questions, and discussions please use the [Github Issues](https://github.com/gregwhitaker/gopher/issues).
+
 ## License
 Copyright (C) 2020 Greg Whitaker
 
