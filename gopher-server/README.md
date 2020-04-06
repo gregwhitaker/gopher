@@ -1,12 +1,16 @@
 # gopher-server
-Self-hosted Google "Go" links service.
+Self-hosted Google "go" short-links service.
 
-## Building the Service
+This service is responsible for both managing and resolving go-links.
+
+## Local Development
+
+### Building the Service
 Run the following command to build the service:
 
     ./gradlew clean build
     
-## Running the Service
+### Running the Service
 Run the following command to start the service in `local` development mode:
 
     ./gradlew bootRunLocal
