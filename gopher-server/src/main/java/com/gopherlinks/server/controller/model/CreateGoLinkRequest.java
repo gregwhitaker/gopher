@@ -1,5 +1,8 @@
 package com.gopherlinks.server.controller.model;
 
+/**
+ * Form submitted when creating a new GoLink.
+ */
 public class CreateGoLinkRequest {
 
     private String golink;
