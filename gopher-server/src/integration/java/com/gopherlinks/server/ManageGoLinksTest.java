@@ -44,14 +44,51 @@ public class ManageGoLinksTest {
     }
 
     @Test
+    public void shouldReturnBadRequestForMissingGoLinkOnCreate() {
+        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+        form.add("golink", "gopher");
+
+        webTestClient.post()
+                .uri("/api/v1/golinks")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .body(BodyInserters.fromFormData(form))
+                .exchange()
+                .expectStatus()
+                    .isBadRequest();
+    }
+
+    @Test
+    public void shouldReturnBadRequestForMissingUrlOnCreate() {
+        MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+        form.add("url", "http://www.gopherlinks.com");
+
+        webTestClient.post()
+                .uri("/api/v1/golinks")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .body(BodyInserters.fromFormData(form))
+                .exchange()
+                .expectStatus()
+                    .isBadRequest();
+    }
+
+    @Test
     public void shouldGetValidGoLink() {
         webTestClient.get()
                 .uri("/goog")
                 .exchange()
                 .expectStatus()
-                .isSeeOther()
+                    .isSeeOther()
                 .expectHeader()
-                .value("Location", Matchers.equalToIgnoringCase("https://www.google.com"));
+                    .value("Location", Matchers.equalToIgnoringCase("https://www.google.com"));
+    }
+
+    @Test
+    public void shouldReturn404WhenAttemptingToGetInvalidGoLink() {
+        webTestClient.get()
+                .uri("/foobar")
+                .exchange()
+                .expectStatus()
+                    .isNotFound();
     }
 
     @Test
