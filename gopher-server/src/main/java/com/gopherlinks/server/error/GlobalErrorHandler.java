@@ -1,5 +1,6 @@
 package com.gopherlinks.server.error;
 
+import com.gopherlinks.server.error.model.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

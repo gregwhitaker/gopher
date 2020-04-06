@@ -1,4 +1,4 @@
-package com.gopherlinks.server.error;
+package com.gopherlinks.server.error.model;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
