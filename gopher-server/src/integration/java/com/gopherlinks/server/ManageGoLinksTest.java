@@ -15,7 +15,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 @SpringBootTest
 @AutoConfigureWebTestClient
 @ActiveProfiles("local")
-public class CreateGoLinkTest {
+public class ManageGoLinksTest {
 
     @Autowired
     private WebTestClient webTestClient;
@@ -41,5 +41,34 @@ public class CreateGoLinkTest {
                     .isSeeOther()
                 .expectHeader()
                     .value("Location", Matchers.equalToIgnoringCase("http://www.gopherlinks.com"));
+    }
+
+    @Test
+    public void shouldGetValidGoLink() {
+        webTestClient.get()
+                .uri("/goog")
+                .exchange()
+                .expectStatus()
+                .isSeeOther()
+                .expectHeader()
+                .value("Location", Matchers.equalToIgnoringCase("https://www.google.com"));
+    }
+
+    @Test
+    public void shouldDeleteValidGoLink() {
+        webTestClient.delete()
+                .uri("/api/v1/golinks/work")
+                .exchange()
+                .expectStatus()
+                    .is2xxSuccessful();
+    }
+
+    @Test
+    public void shouldReturn404WhenAttemptingToDeleteInvalidGoLink() {
+        webTestClient.delete()
+                .uri("/api/v1/golinks/foobar")
+                .exchange()
+                .expectStatus()
+                    .isNotFound();
     }
 }
