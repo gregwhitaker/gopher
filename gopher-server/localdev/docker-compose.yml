@@ -1,0 +1,16 @@
+version: '3.5'
+
+services:
+  database:
+    container_name: gopher-db
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - "POSTGRES_USER=postgres"
+      - "POSTGRES_PASSWORD=postgres"
+      - "POSTGRES_DB=postgres"
+      - "PGDATA=/tmp/localdev/data"
+    volumes:
+      - './.localdev:/tmp/localdev'
+      - '/var/run/docker.sock:/var/run/docker.sock'
