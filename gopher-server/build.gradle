@@ -26,6 +26,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'com.github.gregwhitaker:envopts:1.0.0'
     implementation 'com.github.ben-manes.caffeine:caffeine:2.8.1'
+    implementation 'io.r2dbc:r2dbc-postgresql:0.8.2.RELEASE'
 
     runtimeOnly 'org.postgresql:postgresql:42.2.5'
 
@@ -53,10 +54,6 @@ task buildImage(type: DockerBuildImage, dependsOn: build) {
 }
 
 // Local Development
-clean {
-    delete "${project.rootDir}/localdev/.localdev"
-}
-
 task bootRunLocal {
     bootRun.configure {
         systemProperty 'spring.profiles.active', 'local'
@@ -74,4 +71,8 @@ flyway {
 
 dockerCompose {
     useComposeFiles = ['localdev/docker-compose.yml']
+}
+
+clean {
+    delete 'localdev/.localdev'
 }
