@@ -8,6 +8,8 @@ plugins {
     id "org.unbroken-dome.test-sets"        version "3.0.0"
     id "com.bmuschko.docker-remote-api"     version "3.4.4"
     id "com.adarshr.test-logger"            version "2.0.0"
+    id "org.flywaydb.flyway"                version "6.0.8"
+    id "com.avast.gradle.docker-compose"    version "0.10.10"
 }
 
 group = 'com.gopherlinks'
@@ -25,6 +27,8 @@ dependencies {
     implementation 'com.github.gregwhitaker:envopts:1.0.0'
     implementation 'com.github.ben-manes.caffeine:caffeine:2.8.1'
 
+    runtimeOnly 'org.postgresql:postgresql:42.2.5'
+
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
@@ -40,7 +44,19 @@ tasks.withType(Test) {
     useJUnitPlatform()
 }
 
-// Spring Boot
+// Docker
+task buildImage(type: DockerBuildImage, dependsOn: build) {
+    buildArgs = ['JAR_FILE': "${bootJar.getArchiveFileName().get()}"]
+    dockerFile = file("${projectDir}/src/main/docker/Dockerfile")
+    inputDir = file("${projectDir}")
+    tags = ["com.gopherlinks/${projectDir.name}", "com.gopherlinks/${projectDir.name}:${version}"]
+}
+
+// Local Development
+clean {
+    delete "${project.rootDir}/localdev/.localdev"
+}
+
 task bootRunLocal {
     bootRun.configure {
         systemProperty 'spring.profiles.active', 'local'
@@ -48,10 +64,14 @@ task bootRunLocal {
 }
 bootRunLocal.finalizedBy bootRun
 
-// Docker
-task buildImage(type: DockerBuildImage, dependsOn: build) {
-    buildArgs = ['JAR_FILE': "${bootJar.getArchiveFileName().get()}"]
-    dockerFile = file("${projectDir}/src/main/docker/Dockerfile")
-    inputDir = file("${projectDir}")
-    tags = ["com.gopherlinks/${projectDir.name}", "com.gopherlinks/${projectDir.name}:${version}"]
+flyway {
+    url = 'jdbc:postgresql://localhost:5432/postgres'
+    user = 'postgres'
+    password = 'postgres'
+    locations = ['filesystem:src/main/resources/db/migration',
+                 'filesystem:src/main/resources/db/migration-env/local']
+}
+
+dockerCompose {
+    useComposeFiles = ['localdev/docker-compose.yml']
 }

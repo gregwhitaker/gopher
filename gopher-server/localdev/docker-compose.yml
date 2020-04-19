@@ -2,8 +2,7 @@ version: '3.5'
 
 services:
   database:
-    container_name: gopher-db
-    image: postgres
+    image: postgres:latest
     ports:
       - "5432:5432"
     environment:
